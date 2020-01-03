@@ -10,7 +10,7 @@ setInterval(function () {
         document.querySelector('body').insertAdjacentHTML('afterbegin', html);
     }
     num = document.querySelectorAll('li[data-test-id="chat"] a>div>span')[0].innerText;
-}, 5000)
+}, 10000)
 
 function stop() {
     myAudio.pause();
