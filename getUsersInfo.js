@@ -1,4 +1,4 @@
-var FBID = 'fb1806617322887971';
+var FBID = location.pathname.split('/')[1];
 var referrer = '';
 var widgetJSON = [];
 var aUsersId = [];
