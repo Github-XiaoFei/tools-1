@@ -1,3 +1,4 @@
+
 var FBID = location.pathname.split('/')[1];
 var referrer = '';
 var widgetJSON = [];
@@ -8,7 +9,7 @@ var usersListHTML = "";
 var index = 1;
 var limiter = false;
 var appContent = document.querySelectorAll("#appContent")[0];
-var sidebar = document.querySelectorAll('div[data-test-id="sidebar"]')[0];
+var usersInfoBox = document.querySelector("nav.p-b-sm > ul:nth-child(2)");
 // 上传的数据格式 主要是value定义了小部件的值
 var dataUp = {
   q: "",
@@ -32,7 +33,7 @@ var dataUp = {
 };
 // 获取小部件的属性值
 function getWidgetValue() {
-  fetch("https://manychat.com/"+FBID+"/subscribers/segments", {
+  fetch("https://manychat.com/" + FBID + "/subscribers/segments", {
     method: "GET",
     headers: {
       "user-agent":
@@ -71,8 +72,21 @@ function getWidgetValue() {
       innerHTML();
     });
 }
-getWidgetValue();
 
+let usersInfoHtml = `
+  <li id="get-users-info">
+      <a data-test-id="nav-link-nav-templates" onclick="getWidgetValue()"
+          class="_15e2f103080b1d4cb0129cea4047bb9b-styl" href="#">
+          <div class="row middle e3ec2c7d34e054615a96722234ecfba9-styl">
+              <div class="text-center _51bcde9071f1c948184e887cbd4dcdc8-styl col" data-title-at="right"
+                  data-title-delay="0" style="flex: 0 0 64px; width: 64px; max-width: 64px;"><i class="i-info"></i>
+              </div>
+              <div class="p-r-sm col"><span class="d7326ff5c53e2b7cdafaca74be622b7e-styl">Users Info</span></div>
+          </div>
+      </a>
+  </li>
+  `
+usersInfoBox.insertAdjacentHTML('afterbegin', usersInfoHtml);
 // 插入自定义的HTML
 function innerHTML() {
   var getBootstrap =
@@ -148,7 +162,6 @@ function innerUserListHTML() {
 function getUsersId(value, limiterValue, a) {
   limiter ? '' : aUsersId.length = 0;
   let valueS = value;
-  sidebar.style.zIndex = "-1";
   dataUp.filter.groups[0].items[0].value = value;
   fetch(
     `https://manychat.com/${FBID}/subscribers/search${limiterValue}`,
@@ -175,7 +188,7 @@ function getUsersId(value, limiterValue, a) {
         }
       }
     });
-  
+
   setTimeout(() => {
     let oGetBtn = document.querySelector(`#get-Btn-${a}`);
     let oPintBtn = document.querySelector(`#print-Btn-${a}`);
@@ -217,16 +230,16 @@ function loopUserInfo(arr, a) {
   oProgressBox.classList.remove('d-none');
   oUsersList.classList.add('d-none');
   oUsersListBody.innerHTML = '';
-  
+
   let flag = setInterval(function () {
     getUserInfo(arr[i++]);
     per = parseInt(i / length * 100);
     oProgress.style.width = `${per}%`;
-    oProgress.setAttribute('aria-valuenow', per );
+    oProgress.setAttribute('aria-valuenow', per);
     oProgress.setAttribute('aria-valuemin', 0);
     oProgress.setAttribute('aria-valuemax', length);
     oProgress.innerText = `${per}%`;
-    if (i >length) {
+    if (i > length) {
       clearInterval(flag);
       innerUserListHTML();
       init();
@@ -238,7 +251,7 @@ function loopUserInfo(arr, a) {
   }, 500);
 }
 
-function init(){
+function init() {
   aUsersId.length = 0;
   saveUsersInfo.length = 0;
   index = 1;
@@ -249,8 +262,8 @@ function init(){
 // 获取用户详细信息 参数 userId 用户的id值
 function getUserInfo(userId) {
   fetch(
-    "https://manychat.com/"+FBID+"/subscribers/details?user_id=" +
-      userId,
+    "https://manychat.com/" + FBID + "/subscribers/details?user_id=" +
+    userId,
     {
       method: "GET",
       headers: {
@@ -293,8 +306,8 @@ function saveUsersInfoFun(arr) {
                 </td>
                 <td >${i.gender}</td>
                 <td>${new Date(Number(String(i.raw_ts_added).substring(0, 13)))
-                  .toISOString()
-                  .substring(0, 10)}</td>
+        .toISOString()
+        .substring(0, 10)}</td>
                 <td>${i.locale}</td>
                 <td>${i.language}</td>
                 <td colspan="3">${i.widgets ? i.widgets.join("<br>") : ""}</td>
