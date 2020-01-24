@@ -480,6 +480,12 @@ button,select {
     border-radius: .25rem;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out
 }
+.bell-btn-group-sm>.bell-btn,.bell-btn-sm {
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    border-radius: .2rem
+}
 
 @media (prefers-reduced-motion:reduce) {
     .bell-btn {
