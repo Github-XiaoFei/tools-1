@@ -209,7 +209,7 @@ function innerHTML() {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">工具名称</th>
-                            <th scope="col">用户数量</th>
+                            <th scope="col">用户总数</th>
                             <th scope="col">日期范围</th>
                             <th scope="col">获取数据</th>
                             <th scope="col">输出数据</th>
