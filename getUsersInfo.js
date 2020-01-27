@@ -1,4 +1,4 @@
-// 定义变量
+// 定义各类变量
 var FBID = location.pathname.split('/')[1];
 var referrer = '';
 var widgetJSON = [];
