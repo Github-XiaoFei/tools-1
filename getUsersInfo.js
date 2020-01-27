@@ -9,7 +9,7 @@ var usersListHTML = "";
 var index = 1;
 var limiter = false;
 var assignment = '';
-var dateRange = Date.now() - (86400000*15);
+var dateRange = Date.now() - (86400000 * 15);
 var usersInfoBox = document.querySelector("nav.p-b-sm > ul:nth-child(2)");
 // 上传的数据格式 主要是value定义了小部件的值
 var dataUp = {
@@ -84,9 +84,9 @@ function getWidgetValue() {
                 </tr>
             `;
             }
-        // 调用 innerHTML 插入HTML
+            // 调用 innerHTML 插入HTML
             innerHTML();
-        // 调用 customData 创建控制表头
+            // 调用 customData 创建控制表头
             customData();
         });
 }
@@ -124,7 +124,7 @@ function dataSelect(widget) {
  */
 function customData() {
     let dataSelectBox = document.querySelectorAll('#widget tbody tr');
-    for (let i = 0; i < dataSelectBox.length; i++){
+    for (let i = 0; i < dataSelectBox.length; i++) {
         let dataSelect = dataSelectBox[i].querySelector('#data-select');
         dataSelect.onchange = () => {
             let dataSelectText = dataSelect.options[dataSelect.selectedIndex].text;
@@ -133,16 +133,17 @@ function customData() {
             if (dataSelectText == '自定义') {
                 // 弹出询问框，输入天数
                 result = window.prompt('👋请输入想要的天数。');
-                if (result) {
-                    result = parseFloat(result)
-                } else { 
+                if (result && !(isNaN(parseFloat(result)))) {
+                    result = parseFloat(result).toFixed();
+                    dataSelect.options[dataSelect.selectedIndex].value = result;
+                    dataSelectValue = result;
+                } else {
                     alert('🔔你没有输入任何内容，自定义日期为空。');
                     dataSelect.firstElementChild.selected = true; // 选中第一个option
+                    dataSelectValue = dataSelect.firstElementChild.value;
                 }
-                dataSelect.options[dataSelect.selectedIndex].value = result;
-                dataSelectValue = result;
             }
-            dataSelect.title = dataSelectValue+"天";
+            dataSelect.title = dataSelectValue + "天";
             // 获取数据和输出数据 按钮重置
             let oGetBtn = document.querySelector(`#get-Btn-${i}`);
             let oPintBtn = document.querySelector(`#print-Btn-${i}`);
@@ -156,7 +157,7 @@ function customData() {
             init();
         }
     }
-    
+
 }
 
 /**
@@ -328,7 +329,7 @@ function innerUserListHTML() {
  */
 function formCheckBox(name) {
     let checkBox = document.querySelector('#form').querySelectorAll('input[type="checkbox"]');
-    for (let i = 0; i < checkBox.length; i++){
+    for (let i = 0; i < checkBox.length; i++) {
         if (checkBox[i].id == name) {
             return checkBox[i].checked
         }
@@ -336,7 +337,7 @@ function formCheckBox(name) {
         checkBox[i].onchange = (ev) => {
             let getClass = document.querySelectorAll(`.${ev.target.id}`);
             if (ev.target.checked) {
-                for (let i = 0; i < getClass.length; i++){
+                for (let i = 0; i < getClass.length; i++) {
                     getClass[i].classList.remove('d-none')
                 }
             } else {
@@ -381,7 +382,7 @@ function getUsersId(value, limiterValue, index, dateRange) {
                 limiter = data.limiter;
                 data.users.map(user => {
                     // 如果大于指定日期范围的用户 不把id保存到数组中
-                    if (!(Math.trunc(user.raw_ts_added / 1000) >= Date.now()-(86400000 * dateRange))) return;
+                    if (!(Math.trunc(user.raw_ts_added / 1000) >= Date.now() - (86400000 * dateRange))) return;
                     aUsersId.push(user.user_id);
                 });
                 // 如果有极限值，回调自己
@@ -391,25 +392,25 @@ function getUsersId(value, limiterValue, index, dateRange) {
                 }
             }
         });
-        
-        // 设置定时器 延迟操作 并判断是否有数据
-        setTimeout(() => {
-            if (aUsersId.length == 0) {
-                alert('🔔没有获取到数据，可能是此日期范围内没有数据，请重新选择一个新的日期。')
-            } else {
-                let oGetBtn = document.querySelector(`#get-Btn-${index}`);
-                let oPintBtn = document.querySelector(`#print-Btn-${index}`);
-                oGetBtn.innerText = `完成 有${aUsersId.length}人`;
-                oGetBtn.classList.remove('btn-primary');
-                oGetBtn.classList.add('disabled', 'btn-success');
-                oGetBtn.style.pointerEvents = 'none';
-                oPintBtn.innerText = '开始';
-                oPintBtn.style.pointerEvents = '';
-                oPintBtn.classList.remove('disabled', 'btn-secondary', 'btn-warning');
-                oPintBtn.classList.add('btn-success');
-            }
-        }, 2000)
-        
+
+    // 设置定时器 延迟操作 并判断是否有数据
+    setTimeout(() => {
+        if (aUsersId.length == 0) {
+            alert('🔔没有获取到数据，可能是此日期范围内没有数据，请重新选择一个新的日期。')
+        } else {
+            let oGetBtn = document.querySelector(`#get-Btn-${index}`);
+            let oPintBtn = document.querySelector(`#print-Btn-${index}`);
+            oGetBtn.innerText = `完成 有${aUsersId.length}人`;
+            oGetBtn.classList.remove('btn-primary');
+            oGetBtn.classList.add('disabled', 'btn-success');
+            oGetBtn.style.pointerEvents = 'none';
+            oPintBtn.innerText = '开始';
+            oPintBtn.style.pointerEvents = '';
+            oPintBtn.classList.remove('disabled', 'btn-secondary', 'btn-warning');
+            oPintBtn.classList.add('btn-success');
+        }
+    }, 2000)
+
 }
 
 /**
@@ -467,7 +468,7 @@ function loopUserInfo(arr, index) {
                 oPintBtn.innerText = '完成&重新开始';
                 oPintBtn.classList.remove('btn-success');
                 oPintBtn.classList.add('btn-warning');
-            } else {foo()}
+            } else { foo() }
         }, 300)
     })()
 
@@ -546,10 +547,10 @@ function getAssignment(userId) {
         .then(response => response.json())
         .then(uI => {
             if (uI.state) {
-                uI.thread.assignment ? assignment = uI.thread.assignment.name : '';      
+                uI.thread.assignment ? assignment = uI.thread.assignment.name : '';
             }
         });
-    
+
     return assignment;
 }
 
