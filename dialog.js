@@ -1,6 +1,5 @@
 function notification() {
     let body = document.querySelector('body');
-
     // html code
     let html = `
     <style>
@@ -127,13 +126,13 @@ function notification() {
                 <div class="xf-modal-content">
                     <div class="xf-modal-header">
                         <h5 class="xf-modal-title">提示</h5>
-                        <button type="button" class="xf-close" onclick="stop()"> <span>&times;</span> </button>
+                        <button type="button" id="xf-close"> <span>&times;</span> </button>
                     </div>
                     <div class="xf-modal-body">
                         <p>🔔👋<br><br>新的会话(Live Chat)被启动! (有新用户加入或新信息)</p>
                     </div>
                     <div class="xf-modal-footer">
-                        <button type="button" id="xf-click-btn" onclick="stop()" class="xf-btn xf-btn-primary">我知道了</button>
+                        <button type="button" id="xf-click-btn"" class="xf-btn xf-btn-primary">我知道了</button>
                     </div>
                 </div>
             </div>
@@ -144,12 +143,23 @@ function notification() {
     body.insertAdjacentHTML('afterbegin', html);
 
     let clickBtn = document.querySelector('#xf-click-btn');
+    let close = document.querySelector('#xf-close');
     let dialogBox = document.querySelector('#xf-box-dialog');
-    let observables = document.querySelectorAll('li[data-test-id="chat"] a>div>span')[0];
+    let manychatChatNum = document.querySelectorAll('li[data-test-id="chat"] a>div>span')[0];
+    let silferbotsChatNum = document.getElementById('num_live_chat');
     // 声明提示音 js 创建一个 Audio
-    let myAudio = new Audio("https://freesound.org/data/previews/24/24929_37876-lq.mp3");
+    let myAudio = new Audio("https://raw.githack.com/Github-XiaoFei/Tools/master/sound/samsung_s7.mp3");
     myAudio.loop = true; // 循环
-    var saveValue = observables.innerText;
+
+    let saveValue = null;
+    let observables = null;
+    if (manychatChatNum) {
+        saveValue = manychatChatNum.innerText;
+        observables = manychatChatNum;
+    } else {
+        saveValue = silferbotsChatNum.innerText;
+        observables = silferbotsChatNum;
+    }
 
     // MutationObserver 它会在指定的DOM发生变化时被调用 (监控会话数量是否变化)
     // by https://jsfiddle.net/9P83S/1/
@@ -159,6 +169,7 @@ function notification() {
         if (newValue > saveValue) {
             myAudio.play();
             dialogBox.classList.remove('xf-hidden');
+            setTimeout(() => { myAudio.pause() }, 15000)
         }
         saveValue = newValue;
     });
@@ -166,9 +177,12 @@ function notification() {
     observer.observe(observables, config);
 
     // 点击停止音频播放并隐藏对话框
-    clickBtn.onclick = function () {
+    function stop() {
         myAudio.pause();
         dialogBox.classList.add('xf-hidden');
     }
+    close.onclick = () => stop();
+    clickBtn.onclick = () => stop();
+
 }
 notification();
